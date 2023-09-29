@@ -9,28 +9,28 @@ function writePassword() {
   passwordText.value = password;
 
   function generatePassword() {
-  
+
 
     //prompts user to make selection of necessary criteria to include in password
- 
+
     var needsLowercase = confirm("Select 'OK' to include lowercase letters. Select cancel to omit.");
     var needsUppercase = confirm("Select 'OK' to include uppercase letters. Select cancel to omit.");
     var needsNumeric = confirm("Select 'OK' to include numbers. Select cancel to omit.");
     var needsSpecial = confirm("Select 'OK' to include special characters. Select cancel to omit.")
 
-  //  at least one character type should be selected
+    //  at least one character type should be selected
     if (!needsLowercase && !needsUppercase && !needsNumeric && !needsSpecial) {
       alert("Please choose at least one character to generate a password.")
       return
     }
 
-//  password length should be between 8 and 128 (and exlude any other inputs)
+    //  password length should be between 8 and 128 (and exlude any other inputs)
     var passwordLength = prompt("How many characters does your password need? (Please choose a number between 8 and 128)")
     if ((!(passwordLength <= 128)) || (!(passwordLength >= 8))) {
       alert("Please choose a number between 8 and 128.")
       return
     }
-    
+
 
 
     //Different lists of possible characters
@@ -43,48 +43,45 @@ function writePassword() {
     var unscrambledArray = []
 
     //creates an array of the characters selected for use
-    var characters = []
-    if(needsSpecial) {
-      characters = characters.concat(specialList)
+    var possibleCharacters = []
+
+    // adds allowable characters to a master list *
+    // checks to make sure all 4 criteria are met (assuming the user chose 'Ok' on all 4)
+    if (needsSpecial) {
+      possibleCharacters = possibleCharacters.concat(specialList)
+
+      var randomSpecial = specialList[Math.floor(Math.random() * specialList.length)]
+      unscrambledArray.push(randomSpecial)
     }
-    if(needsLowercase) {
-     characters = characters.concat(lowercaseList)
+
+    if (needsLowercase) {
+      possibleCharacters = possibleCharacters.concat(lowercaseList)
+
+      var randomLowercase = lowercaseList[Math.floor(Math.random() * lowercaseList.length)]
+      unscrambledArray.push(randomLowercase)
     }
+
     if (needsUppercase) {
-      characters = characters.concat(uppercaseList)
+      possibleCharacters = possibleCharacters.concat(uppercaseList)
+
+      var randomUppercase = uppercaseList[Math.floor(Math.random() * uppercaseList.length)]
+      unscrambledArray.push(randomUppercase)
     }
+
     if (needsNumeric) {
-      characters = characters.concat(numberList)
+      possibleCharacters = possibleCharacters.concat(numberList)
+
+      var randomNumeric = numberList[Math.floor(Math.random() * numberList.length)]
+      unscrambledArray.push(randomNumeric)
     }
 
     // specialList.concat(numberList.concat(lowercaseList.concat(uppercaseList)))
-    for (x = 0; x < passwordLength; x++) {
-      // checks to make sure all 4 criteria are met (assuming the user chose 'Ok' on all 4)
-      if (needsLowercase) {
-        var randomLowercase = lowercaseList[Math.floor(Math.random() * lowercaseList.length)]
-        unscrambledArray.push(randomLowercase)
-        needsLowercase = false
-      }
-      else if (needsUppercase) {
-        var randomUppercase = uppercaseList[Math.floor(Math.random() * uppercaseList.length)]
-        unscrambledArray.push(randomUppercase)
-        needsUppercase = false
-      }
-      else if (needsNumeric) {
-        var randomNumeric = numberList[Math.floor(Math.random() * numberList.length)]
-        unscrambledArray.push(randomNumeric)
-        needsNumeric = false
-      }
-      else if (needsSpecial) {
-        var randomSpecial = specialList[Math.floor(Math.random() * specialList.length)]
-        unscrambledArray.push(randomSpecial)
-        needsSpecial = false
-      }
+    for (x = unscrambledArray.length; x < passwordLength; x++) {
+
+
       // fills the rest of the array with randomly selected characters
-      else {
-       var randomCharacter = characters[(Math.floor(Math.random() * characters.length))]
-        unscrambledArray.push(randomCharacter)
-      }
+      var randomCharacter = possibleCharacters[(Math.floor(Math.random() * possibleCharacters.length))]
+      unscrambledArray.push(randomCharacter)
 
     }
     // scrambles the array so that the order isn't predictable
