@@ -7,16 +7,27 @@ function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
+   //Different lists of possible characters
+   specialList = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
+   numberList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+   lowercaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+   uppercaseList = lowercaseList.map(function (x) { return x.toUpperCase(); })
+
   passwordText.value = password;
  
   function generatePassword() {
 
     //prompts user to make selection of necessary criteria to include in password
-
-    var needsLowercase = confirm("Select 'OK' to include lowercase letters. Select cancel to omit.");
-    var needsUppercase = confirm("Select 'OK' to include uppercase letters. Select cancel to omit.");
-    var needsNumeric = confirm("Select 'OK' to include numbers. Select cancel to omit.");
-    var needsSpecial = confirm("Select 'OK' to include special characters. Select cancel to omit.")
+    class criteriaBools {
+      constructor(boolExternal, inputlist){
+        this._bool = boolExternal;
+        this._list = inputList;
+      }
+    }
+    var needsLowercase = new criteriaBools(confirm("Select 'OK' to include lowercase letters. Select cancel to omit."), lowercaseList);
+    var needsUppercase = new criteriaBools(confirm("Select 'OK' to include uppercase letters. Select cancel to omit."),uppercaseList);
+    var needsNumeric = new criteriaBools(confirm("Select 'OK' to include numbers. Select cancel to omit."), numberList);
+    var needsSpecial = new criteriaBools(confirm("Select 'OK' to include special characters. Select cancel to omit."), specialList)
 
     //  at least one character type should be selected
     if (!needsLowercase && !needsUppercase && !needsNumeric && !needsSpecial) {
@@ -31,11 +42,7 @@ function writePassword() {
       return
     }
 
-    //Different lists of possible characters
-    specialList = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
-    numberList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    lowercaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-    uppercaseList = lowercaseList.map(function (x) { return x.toUpperCase(); })
+ 
     console.log(specialList)
 
     //creates an array to randomly choose the number of characters from the prompt, making sure that all password criteria are met
