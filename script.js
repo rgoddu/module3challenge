@@ -8,18 +8,32 @@ function writePassword() {
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
- 
+
   function generatePassword() {
 
-    //prompts user to make selection of necessary criteria to include in password
+      //Different lists of possible characters
+  var specialList = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
+  var numberList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  var lowercaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+  var uppercaseList = lowercaseList.map(function (x) { return x.toUpperCase(); })
 
-    var needsLowercase = confirm("Select 'OK' to include lowercase letters. Select cancel to omit.");
-    var needsUppercase = confirm("Select 'OK' to include uppercase letters. Select cancel to omit.");
-    var needsNumeric = confirm("Select 'OK' to include numbers. Select cancel to omit.");
-    var needsSpecial = confirm("Select 'OK' to include special characters. Select cancel to omit.")
+    //prompts user to make selection of necessary criteria to include in password
+    class criteriaObject {
+      constructor(boolExternal, inputList) {
+        this._bool = boolExternal;
+        this._list = inputList;
+      }
+    }
+    var lowercaseObject = new criteriaObject(confirm("Select 'OK' to include lowercase letters. Select cancel to omit."), lowercaseList);
+    var uppercaseObject = new criteriaObject(confirm("Select 'OK' to include uppercase letters. Select cancel to omit."), uppercaseList);
+    var numericObject = new criteriaObject(confirm("Select 'OK' to include numbers. Select cancel to omit."), numberList);
+    var specialObject = new criteriaObject(confirm("Select 'OK' to include special characters. Select cancel to omit."), specialList)
+    
+    var criteriaObjectsList = [lowercaseObject, uppercaseObject, numericObject, specialObject]
+
 
     //  at least one character type should be selected
-    if (!needsLowercase && !needsUppercase && !needsNumeric && !needsSpecial) {
+    if (!lowercaseObject._bool && !uppercaseObject._bool && !numericObject._bool && !specialObject._bool) {
       alert("Please choose at least one character to generate a password.")
       return
     }
@@ -31,13 +45,6 @@ function writePassword() {
       return
     }
 
-    //Different lists of possible characters
-    specialList = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
-    numberList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    lowercaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-    uppercaseList = lowercaseList.map(function (x) { return x.toUpperCase(); })
-    console.log(specialList)
-
     //creates an array to randomly choose the number of characters from the prompt, making sure that all password criteria are met
     var unscrambledArray = []
 
@@ -46,23 +53,23 @@ function writePassword() {
 
     // adds allowable characters to a master list *
     // checks to make sure all 4 criteria are met (assuming the user chose 'Ok' on all 4)
-    function meetCriteria(needsCriteria, criteriaList){
+    function meetCriteria(needsCriteria, criteriaList) {
       if (needsCriteria) {
         possibleCharacters = possibleCharacters.concat(criteriaList)
-    
+
         var randomz = criteriaList[Math.floor(Math.random() * criteriaList.length)]
         unscrambledArray.push(randomz)
       }
     }
-    meetCriteria(needsNumeric, numberList)
-    meetCriteria(needsLowercase, lowercaseList)
-    meetCriteria(needsUppercase, uppercaseList)
-    meetCriteria(needsSpecial, specialList)
+    //runs through function created above for each criteria
+    for(x = 0; x < criteriaObjectsList.length; x++){
+      meetCriteria(criteriaObjectsList[x]._bool, criteriaObjectsList[x]._list)
+    }
 
     // fills the rest of the array with randomly selected characters
     for (x = unscrambledArray.length; x < passwordLength; x++) {
 
-        var randomCharacter = possibleCharacters[(Math.floor(Math.random() * possibleCharacters.length))]
+      var randomCharacter = possibleCharacters[(Math.floor(Math.random() * possibleCharacters.length))]
       unscrambledArray.push(randomCharacter)
     }
 
