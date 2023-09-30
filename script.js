@@ -7,8 +7,6 @@ function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
-
-
   passwordText.value = password;
 
   function generatePassword() {
@@ -21,7 +19,6 @@ function writePassword() {
 
     //prompts user to make selection of necessary criteria to include in password
     class criteriaObject {
-     
       constructor(boolExternal, inputList) {
         this._bool = boolExternal;
         this._list = inputList;
@@ -64,8 +61,8 @@ function writePassword() {
         unscrambledArray.push(randomz)
       }
     }
+    //runs through function created above for each criteria
     for(x = 0; x < criteriaObjectsList.length; x++){
-      console.log(criteriaObjectsList)
       meetCriteria(criteriaObjectsList[x]._bool, criteriaObjectsList[x]._list)
     }
 
