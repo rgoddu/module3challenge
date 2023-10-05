@@ -4,10 +4,7 @@ var generateBtn = document.querySelector("#generate");
 // Write password to the #password input
 
 function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
+  generatePassword();
 
   function generatePassword() {
 
@@ -17,7 +14,7 @@ function writePassword() {
   var lowercaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
   var uppercaseList = lowercaseList.map(function (x) { return x.toUpperCase(); })
 
-    //prompts user to make selection of necessary criteria to include in password
+    //prompts user to make selection of necessary criteria to include in password and stores them in objects within a class
     class criteriaObject {
       constructor(boolExternal, inputList) {
         this._bool = boolExternal;
@@ -29,8 +26,8 @@ function writePassword() {
     var numericObject = new criteriaObject(confirm("Select 'OK' to include numbers. Select cancel to omit."), numberList);
     var specialObject = new criteriaObject(confirm("Select 'OK' to include special characters. Select cancel to omit."), specialList)
     
+    //adds criteria to an array
     var criteriaObjectsList = [lowercaseObject, uppercaseObject, numericObject, specialObject]
-
 
     //  at least one character type should be selected
     if (!lowercaseObject._bool && !uppercaseObject._bool && !numericObject._bool && !specialObject._bool) {
@@ -51,14 +48,15 @@ function writePassword() {
     //creates an array of the characters selected for use
     var possibleCharacters = []
 
-    // adds allowable characters to a master list *
-    // checks to make sure all 4 criteria are met (assuming the user chose 'Ok' on all 4)
+    // Creates function to:
+    // adds allowable characters to a master list "possibleCharacters"
+    // Makes sure all the criteria is met in the password output (assuming the user chose 'Ok' on all 4)
     function meetCriteria(needsCriteria, criteriaList) {
       if (needsCriteria) {
         possibleCharacters = possibleCharacters.concat(criteriaList)
 
-        var randomz = criteriaList[Math.floor(Math.random() * criteriaList.length)]
-        unscrambledArray.push(randomz)
+        var randomListOutput = criteriaList[Math.floor(Math.random() * criteriaList.length)]
+        unscrambledArray.push(randomListOutput)
       }
     }
     //runs through function created above for each criteria
@@ -66,7 +64,7 @@ function writePassword() {
       meetCriteria(criteriaObjectsList[x]._bool, criteriaObjectsList[x]._list)
     }
 
-    // fills the rest of the array with randomly selected characters
+    // fills the rest of the array with randomly selected characters from the master list of all possible characters
     for (x = unscrambledArray.length; x < passwordLength; x++) {
 
       var randomCharacter = possibleCharacters[(Math.floor(Math.random() * possibleCharacters.length))]
@@ -83,8 +81,10 @@ function writePassword() {
 
     //transforms the array into a string to output
     passwordOutput = scrambledArray.join("")
-    alert("Password: " + passwordOutput + "\n" + scrambledArray.length)
-    console.log(scrambledArray.length)
+
+    var passwordArea = document.getElementById('password') 
+    passwordArea.value = passwordOutput
+    
   }
 }
 
